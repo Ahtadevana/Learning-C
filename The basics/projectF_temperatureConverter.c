@@ -15,7 +15,7 @@ int main()  {
     printf("'F' to convert Fahrenheit to Celsius\n");
     printf("Your choice: ");
     scanf(" %c", &choice);
-    choice = toupper(choice);
+    choice = toupper(choice);   //ctype.h thing doing its thing
 
     if(choice == 'C') {
         result = (temp * 9.0 / 5.0) + 32;
