@@ -1,22 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main()  {
-    size_t n = 5;
+void copyArr(int *arrA, int *arrB);
 
-    int *pMemAlloc = calloc(n, sizeof(int));
+int main(){
+    size_t arrSize = 5;
+    int *arr = calloc(arrSize, sizeof(int));
+    int *fooArr = calloc(arrSize, sizeof(int));
 
-    if(pMemAlloc == NULL) {
-        printf("Allocation failed");
-        return 1;
+    for(int i=0; i<arrSize; i++){
+        arr[i] = i+1;
     }
 
-    for(int i=0; i < n; i++) {
-        printf("%d ", pMemAlloc[i]);
+    copyArr(arr, fooArr);
+
+    for(int i=0; i<arrSize; i++){
+        printf("%d ", fooArr[i]);
     }
-
-    free(pMemAlloc);
-    pMemAlloc = NULL;
-
     return 0;
+}
+
+void copyArr(int *arrA, int *arrB){
+    for(int i=0; i<5; i++){
+        *(arrB + i) = *(arrA + i);
+    }
 }
