@@ -9,6 +9,7 @@ typedef struct node {
 
 Node* createNode(int data);
 void insertAtHead(Node **head, int data);
+void insertAtValue(Node **head, int data);
 void insertAtTail(Node **head, int data);
 void searchNode(Node *head, int data);
 void printNode(Node *head);
