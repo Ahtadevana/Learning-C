@@ -7,14 +7,23 @@ typedef struct node {
     struct node *next;
 } Node;
 
+//Insertion
 Node* createNode(int data);
 void insertAtHead(Node **head, int data);
 void insertAfterValue(Node *head, int key, int data);
 void insertAtTail(Node **head, int data);
+void setAllListValue(Node **head, int data);
+void replaceNodeValue(Node **head, int key, int data);
 
-void zeroList(Node **head);
+//Deletion
+void setListZero(Node **head);
+void setNodeZero(Node **head, int key);
+void deleteHead(Node **head);
 void deleteNode(Node **head, int key);
+void deleteTail(Node **head);
+void freeList(Node **head);
 
+//Display
 void listLen(Node *head);
 void searchNode(Node *head, int key);
 void printList(Node *head);
@@ -38,14 +47,42 @@ int main() {
 
     searchNode(head, 20);
     insertAtTail(&head, 50);
+    
+    deleteHead(&head);
+    printList(head);
+
+    deleteHead(&head);
+    printList(head);
+
+    deleteTail(&head);
+    printList(head);
+
     deleteNode(&head, 30);
     printList(head);
 
+    deleteNode(&head, 40);
+    printList(head);
     listLen(head);
 
+    setNodeZero(&head, 25);
+    printList(head);
+
+    setListZero(&head);
+    printList(head);
+
+    replaceNodeValue(&head, 0, 10);
+    replaceNodeValue(&head, 0, 15);
+    replaceNodeValue(&head, 0, 20);
+    replaceNodeValue(&head, 1738, 20);
+    printList(head);
+
+    freeList(&head);
+    printList(head);
+    listLen(head);
     return 0;
 }
 
+//==========================================INSERTION==========================================
 Node* createNode(int data){
     Node *newNode = (Node*)malloc(sizeof(Node));
     if(!newNode){
@@ -64,17 +101,17 @@ void insertAtHead(Node **head, int data){
 }
 
 void insertAfterValue(Node *head, int key, int data){
-    Node *newNode = createNode(data);
-    Node *temp = head;
-
-    while(temp != NULL){
-        if(temp->data == key){
-            newNode->next = temp->next;
-            temp->next = newNode;
+    Node *current = head;
+    
+    while(current != NULL){
+        if(current->data == key){
+            Node *newNode = createNode(data);
+            newNode->next = current->next;
+            current->next = newNode;
             printf("Data found! Allocated after %d\n", key);
             return;
         }
-        temp = temp->next;
+        current = current->next;
     }
     printf("Data %d NOT found! Allocation failed!\n", key);
 }
@@ -95,15 +132,118 @@ void insertAtTail(Node **head, int data){
     }
 }
 
-void zeroList(Node **head){
+void setAllListValue(Node **head, int data){
+    Node *current = *head;
+    while(current != NULL){
+        current->data = data;
+        current = current->next;
+    }
+}
+
+void replaceNodeValue(Node **head, int key, int data){
+    Node *current = *head;
+    while(current != NULL){
+        if(current->data == key){
+            current->data = data;
+            return; //prevents changing duplicated values
+        }
+        current = current->next;
+    }
+    printf("Data %d NOT found! Altering failed!\n", key);
+}
+
+//==========================================DELETION==========================================
+void setListZero(Node **head){
+    if(*head == NULL){
+        printf("List is EMPTY!\n");
+        return;
+    }
     for(Node *current = *head; current != NULL; current = current->next){
         current->data = 0;
     }
     printf("All datas are ZERO-ed!\n");
 }
 
+void setNodeZero(Node **head, int key){
+    if(*head == NULL){
+        printf("List is EMPTY!\n");
+        return;
+    }
+
+    Node *current = *head;
+    while(current != NULL){
+        if(current->data == key){
+            current->data = 0;
+            return;
+        }
+        current = current->next;
+    }
+    printf("Data %d NOT found! Altering failed!\n", key);
+}
+
+void deleteHead(Node **head){
+    if(*head == NULL){
+        printf("List is EMPTY!\n");
+        return;
+    } else {
+        Node *temp = *head;
+        free(*head);
+        *head = temp->next;
+    }
+}
+
+void deleteNode(Node **head, int key){
+    if(*head == NULL){
+        printf("List is EMPTY!\n");
+        return;
+    }
+
+    Node *current = *head;
+    if((*head)->next == NULL){
+        Node *temp = *head;
+        *head = (*head)->next;
+        free(temp);
+        *head == NULL;
+    }
+    while(current->next != NULL && current->next->data != key){
+        current = current->next;
+    }
+    if(current->next == NULL){
+        printf("Data %d NOT found! Deletion failed!\n", key);
+    }
+    Node *temp = current->next;
+    current->next = temp->next;
+    free(temp);
+}
+
+void deleteTail(Node **head){
+    Node *current = *head;
+    if(*head == NULL){
+        printf("List is EMPTY!\n");
+    } else if((*head)->next == NULL) {
+        free((*head)->next);
+        *head = NULL;
+    }
+    while(current->next->next != NULL){
+        current = current->next;
+    }
+    free(current->next);
+    current->next = NULL;
+}
+
+void freeList(Node **head){
+    Node *current = *head;
+    while(current != NULL){
+        Node *temp = current;
+        free(temp);
+        current = current->next;
+    }
+    *head = NULL;
+}
+
+//==========================================DISPLAY==========================================
 void listLen(Node *head){
-    int count;
+    int count = 0;
     for(Node *current = head; current != NULL; current = current->next){
         count++;
     }
