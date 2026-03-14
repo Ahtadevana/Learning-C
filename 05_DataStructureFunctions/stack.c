@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef struct node {
     struct node *next;
@@ -9,26 +10,20 @@ typedef struct node {
 Node* createStack(int data);
 void push(Node **top, int data);
 void pop(Node **top);
+void popAll(Node **top);
 
 void peek(Node *top);
-void isEmpty(Node *top);
+void peekAll(Node *top);
+bool isEmpty(Node *top);
 
 int main(){
     Node *top = createStack(30);
+
     push(&top, 20);
     push(&top, 10);
-    peek(top);
+    peekAll(top);
 
-    pop(&top);
-    peek(top);
-
-    pop(&top);
-    peek(top);
-
-    pop(&top);
-    peek(top);
-
-    pop(&top);
+    popAll(&top);
     peek(top);
     return 0;
 }
@@ -69,10 +64,42 @@ void pop(Node **top){
     free(temp);
 }
 
+void popAll(Node **top){
+    if(*top == NULL){
+        printf("Stack is EMPTY!\n");
+        return;
+    }
+
+    Node *current = *top;
+    while(current != NULL){
+        Node *temp = current;
+        current = current->next;
+        free(temp);
+    }
+    *top = NULL;
+}
+
 void peek(Node *top){
     if(top == NULL){
         printf("NULL\n");
         return;
     }
     printf("%d\n", top->data);
+}
+
+void peekAll(Node *top){
+    Node *current = top;
+
+    printf("Top: ");
+    while(current != NULL){
+        printf("%d <- ", current->data);
+        current = current->next;
+    } printf("NULL\n");
+}
+
+bool isEmpty(Node *top){
+    if(top == NULL){
+        return true;
+    }
+    return false;
 }
