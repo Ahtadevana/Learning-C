@@ -25,6 +25,8 @@ int main(){
 
     popAll(&top);
     peek(top);
+    
+    isEmpty(top)? printf("Empty!\n") : printf("NOT Empty!\n");
     return 0;
 }
 
@@ -94,7 +96,8 @@ void peekAll(Node *top){
     while(current != NULL){
         printf("%d <- ", current->data);
         current = current->next;
-    } printf("NULL\n");
+    } 
+    printf("NULL\n");
 }
 
 bool isEmpty(Node *top){
