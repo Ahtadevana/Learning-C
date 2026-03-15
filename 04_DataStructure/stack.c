@@ -42,5 +42,6 @@ int main() {
         free(temp);
         current = current->next;
     }
+    top = NULL;
     return 0;
 }
